@@ -1,0 +1,163 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Accounts {
+  id: String!
+  provider: String!
+  provider_account_id: String!
+  scope: String
+  session_state: String
+  type: String!
+  userId: String!
+  users: User!
+}
+
+input CreateSubscriptionInput {
+  planName: String!
+  price: String!
+  priceId: String!
+  userId: String!
+  videoQuality: String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+}
+
+input CreateUserSubscriptionInput {
+  cancelAtCurrentPeriodEnd: Boolean!
+  planName: String!
+  planPrice: String!
+  status: String!
+  stripeCurrentPeriodEnd: DateTime!
+  stripeCustomerId: String!
+  stripePriceId: String!
+  stripeSubscriptionId: String!
+  userId: String!
+  videoQuality: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  addMovieToList(myListInput: MyListInput!): MyList!
+  changeUserEmail(newEmail: String!, userId: String!): User!
+  changeUserPassword(updatePasswordInput: UpdatePasswordInput!): User!
+  createProfile(profileInput: ProfileInput!): Profile!
+  createSubscription(createSubscriptionInput: CreateSubscriptionInput!): String!
+  createUser(createUserInput: CreateUserInput!): User!
+  createUserSubscription(createUserSubscriptionInput: CreateUserSubscriptionInput!): UserSubscription!
+  deleteProfile(id: String!): Profile!
+  registerUser(createUserInput: CreateUserInput!): User!
+  removeMovieFromList(movieId: String!, profileId: String!): MyList!
+  renameProfile(id: String!, name: String!): Profile!
+  updateSubscription(updateUserSubscriptionInput: UpdateUserSubscriptionInput!): Boolean!
+  updateUserSubscription(updateSubscriptionInput: UpdateUserSubscriptionInput!): UserSubscription!
+  userLogin(email: String!, password: String!): Session!
+}
+
+type MyList {
+  id: String!
+  movieId: String!
+  moviePosterPath: String!
+  movieReleaseDate: String!
+  movieTitle: String!
+  profileId: String!
+}
+
+input MyListInput {
+  movieId: String!
+  moviePosterPath: String!
+  movieReleaseDate: String!
+  movieTitle: String!
+  profileId: String!
+}
+
+type PaymentMethodDetails {
+  brand: String!
+  exp_month: Float!
+  exp_year: Float!
+  last4: String!
+}
+
+type Profile {
+  id: String!
+  imageSrc: String!
+  my_list: [MyList!]
+  name: String!
+  userId: String!
+}
+
+input ProfileInput {
+  imageSrc: String!
+  name: String!
+  userId: String!
+}
+
+type Query {
+  checkSubscription(userId: String!): Boolean!
+  getLikedMovie(movieId: String!, profileId: String!): MyList
+  getLikedMovies(profileId: String!): [MyList!]
+  getPaymentMethodDetails(customerId: String!): PaymentMethodDetails
+  getProfile(id: String!): Profile
+  getProfiles(userId: String!): [Profile!]
+  getUserByEmail(email: String!): User
+  getUserById(id: String!): User
+  getUserSubscription(userId: String!): UserSubscription!
+}
+
+type Session {
+  accessToken: String!
+  email: String!
+  id: String!
+  refreshToken: String!
+}
+
+input UpdatePasswordInput {
+  confirmPassword: String!
+  newPassword: String!
+  oldPassword: String!
+  userId: String!
+}
+
+input UpdateUserSubscriptionInput {
+  action: String
+  cancelAtCurrentPeriodEnd: Boolean
+  planName: String
+  planPrice: String
+  priceId: String
+  status: String
+  stripeCurrentPeriodEnd: DateTime
+  stripePriceId: String
+  stripeSubscriptionId: String
+  userId: String
+  videoQuality: String
+}
+
+type User {
+  accounts: Accounts
+  email: String!
+  id: String!
+  password: String!
+  profile: Profile
+  userSubscriptions: UserSubscription
+}
+
+type UserSubscription {
+  cancelAtCurrentPeriodEnd: Boolean!
+  id: String!
+  planName: String!
+  planPrice: String!
+  status: String!
+  stripeCurrentPeriodEnd: DateTime!
+  stripeCustomerId: String!
+  stripePriceId: String!
+  stripeSubscriptionId: String!
+  userId: String!
+  videoQuality: String!
+}

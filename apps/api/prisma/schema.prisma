@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id       String   @id
+  name     String
+  imageSrc String
+  userId   String
+  users    Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  myList   MyList[]
+
+  @@index([userId])
+}
+
+model MyList {
+  id               String  @id
+  profileId        String
+  movieId          String
+  movieTitle       String
+  movieReleaseDate String
+  moviePosterPath  String
+  profile          Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, movieId])
+}
+
+model UserSubscriptions {
+  id                       String    @id
+  userId                   String    @unique
+  stripeCustomerId         String    @unique
+  stripeSubscriptionId     String    @unique
+  stripePriceId            String
+  stripeCurrentPeriodEnd   DateTime?
+  videoQuality             String
+  planPrice                String
+  planName                 String
+  status                   String
+  cancelAtCurrentPeriodEnd Boolean
+  users                    Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Users {
+  id                 String             @id
+  email              String             @unique
+  password           String
+  profile            Profile[]
+  userSubscriptions  UserSubscriptions?
+  hashedRefreshToken String?
+}
