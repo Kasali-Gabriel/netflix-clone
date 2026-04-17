@@ -2,10 +2,10 @@
 
 import Image from 'next/image';
 import { useContext } from 'react';
-import useChangePage from '../../hooks/useChangePage';
 import LoginButton from '../Buttons/LoginButton';
 import SignOutBtn from '../Buttons/SignOutBtn';
-import { UserContext } from '../../context/UserContext';
+import useChangePage from '@/hooks/useChangePage';
+import { UserContext } from '@/context/UserContext';
 
 const SignUpNav = () => {
   const changePage = useChangePage();

@@ -1,12 +1,12 @@
 'use client';
 
+import useChangePage from '@/hooks/useChangePage';
+import { fetchMovies } from '@/lib/movieFetcher';
+import { GenreDropdownProps } from '@/types/Movie';
 import { faTag, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChevronDownIcon } from 'lucide-react';
 import { Key, useEffect, useState } from 'react';
-import useChangePage from '../../hooks/useChangePage';
-import { fetchMovies } from '../../lib/movieFetcher';
-import { GenreDropdownProps } from '../../types/Movie';
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import {

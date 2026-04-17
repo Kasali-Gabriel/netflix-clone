@@ -1,4 +1,4 @@
-import { ChangeAuthDetailsProps } from '../../types/index';
+import { ChangeAuthDetailsProps } from '@/types/index';
 import ChangeEmail from './ChangeEmail';
 import ChangePassword from './ChangePassword';
 

@@ -1,4 +1,4 @@
-import { MovieDetailsProps } from '../../types/Movie';
+import { MovieDetailsProps } from '@/types/Movie';
 import MyList from '../Buttons/MyList';
 import ShowMoreText from '../Buttons/ShowMore';
 import {

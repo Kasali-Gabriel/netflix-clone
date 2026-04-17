@@ -1,6 +1,6 @@
 'use client';
 
-import SignUpNav from '../../../components/NavigationComponents/SignUpNav';
+import SignUpNav from '@/components/Navigation/SignUpNav';
 
 interface LayoutProps {
   children: React.ReactNode;

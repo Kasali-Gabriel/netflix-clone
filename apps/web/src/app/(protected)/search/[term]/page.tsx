@@ -1,14 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import PaginationSection from '@/components/Filters/Pagination';
+import MoviesCarousel from '@/components/Movies/MoviesCarousel';
+import { getPopularMovies, getSearchMovies } from '@/lib/movieFetcher';
+import { SearchPageProps } from '@/types/index';
+import { Movie } from '@/types/Movie';
+import { use, useEffect, useState } from 'react';
 import { FadeLoader } from 'react-spinners';
-import { SearchPageProps } from '../../../../types';
-import { Movie } from '../../../../types/Movie';
-import { getPopularMovies, getSearchMovies } from '../../../../lib/movieFetcher';
-import MoviesCarousel from '../../../../components/MovieComponents/MoviesCarousel';
-import PaginationSection from '../../../../components/Filters/Pagination';
 
-const SearchPage = ({ params: { term } }: SearchPageProps) => {
+const SearchPage = ({ params }: SearchPageProps) => {
+  const { term } = use(params) as { term: string };
   const termToUse = decodeURI(term);
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -75,7 +76,7 @@ const SearchPage = ({ params: { term } }: SearchPageProps) => {
       <div className="flex flex-col space-y-4">
         <div>
           <h1 className="w-full px-4 text-left text-2xl sm:text-3xl md:text-5xl">
-            results for your search {' '}
+            results for your search{' '}
             <span className="font-bold italic">"{termToUse}"</span>
           </h1>
 

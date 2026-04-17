@@ -1,34 +1,34 @@
 'use client';
 
-import { useMutation } from '@apollo/client';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
-import { useContext, useState, useTransition } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import Loader from '../../../components/Buttons/ButtonLoader';
-import FormError from '../../../components/FormComponents/form-error';
-import { Button } from '../../../components/ui/button';
+import Loader from '@/components/Buttons/ButtonLoader';
+import FormError from '@/components/Form/form-error';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../../../components/ui/card';
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '../../../components/ui/form';
-import { Input } from '../../../components/ui/input';
-import { UserContext } from '../../../context/UserContext';
-import { USER_LOGIN } from '../../../graphql/mutations';
-import useChangePage from '../../../hooks/useChangePage';
-import { createSession } from '../../../lib/session';
-import { LoginSchema } from '../../../Schemas';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { UserContext } from '@/context/UserContext';
+import { USER_LOGIN } from '@/graphql/mutations';
+import useChangePage from '@/hooks/useChangePage';
+import { createSession } from '@/lib/session';
+import { LoginSchema } from '@/Schemas';
+import { useMutation } from '@apollo/client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
+import { useContext, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 const Page = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({

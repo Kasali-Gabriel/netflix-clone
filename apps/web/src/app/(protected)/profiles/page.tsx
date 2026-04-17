@@ -1,16 +1,16 @@
 'use client';
 
+import { AddProfileCard } from '@/components/Profile/AddProfileCard';
+import { ProfileDialog } from '@/components/Profile/Dialogs';
+import PageLoader from '@/components/Theme/pageLoader';
+import { UserContext } from '@/context/UserContext';
+import { GET_PROFILES } from '@/graphql/queries';
+import { useAddProfile } from '@/hooks/useAddProfile';
+import { useProfileClick } from '@/hooks/useProfileClick';
+import { Profile, ProfileCardProps } from '@/types/Profile';
 import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
-import { AddProfileCard } from '../../../components/ProfileComponent/AddProfileCard';
-import { ProfileDialog } from '../../../components/ProfileComponent/Dialogue';
-import PageLoader from '../../../components/Theme/pageLoader';
-import { UserContext } from '../../../context/UserContext';
-import { GET_PROFILES } from '../../../graphql/queries';
-import { useAddProfile } from '../../../hooks/useAddProfile';
-import { useProfileClick } from '../../../hooks/useProfileClick';
-import { Profile, ProfileCardProps } from '../../../types/Profile';
 
 const ProfileCard = ({ name, imageSrc, onClick }: ProfileCardProps) => (
   <div

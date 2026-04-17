@@ -1,11 +1,11 @@
+import useChangePage from '@/hooks/useChangePage';
+import { SearchInputProps } from '@/types/Movie';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import useChangePage from '../../hooks/useChangePage';
-import { SearchInputProps } from '../../types/Movie';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem } from '../ui/form';
 import { Input } from '../ui/input';

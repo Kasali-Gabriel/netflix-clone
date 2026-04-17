@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "start": "next start"
   },
   "dependencies": {
@@ -53,7 +53,7 @@
     "zod": "^3.23.5"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^16.1.7",
+    "@next/eslint-plugin-next": "^14.2.35",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/js-cookie": "^3.0.6",

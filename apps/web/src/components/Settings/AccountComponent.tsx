@@ -5,15 +5,15 @@ import { ArrowLeftIcon, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FadeLoader } from 'react-spinners';
-import { UPDATE_SUBSCRIPTION } from '../../graphql/mutations';
-import { GET_USER_BY_ID, GET_USER_SUBSCRIPTION } from '../../graphql/queries';
-import { useToast } from '../../hooks/use-toast';
-import useUser from '../../hooks/useGetUser';
-import ChangeAuthDetails from '../ChangeAuthDetails/ChangeAuthDetails';
+import ChangeAuthDetails from '../ChangeAuthDetails';
 import PlanSelector from '../Plans/PlanSelector';
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
 import BillingDetails from './ManageBilling';
+import useUser from '@/hooks/useGetUser';
+import { GET_USER_BY_ID, GET_USER_SUBSCRIPTION } from '@/graphql/queries';
+import { useToast } from '@/hooks/use-toast';
+import { UPDATE_SUBSCRIPTION } from '@/graphql/mutations';
 
 const AccountComponent = () => {
   const { getUserId } = useUser();

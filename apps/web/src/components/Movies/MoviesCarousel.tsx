@@ -1,8 +1,8 @@
 'use client';
+import { cn } from '@/lib/utils';
+import { Movie, MovieCarouselProps } from '@/types/Movie';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { cn } from '../../lib/utils';
-import { Movie, MovieCarouselProps } from '../../types/Movie';
 import { Button } from '../ui/button';
 import MovieCard from './MovieCard';
 
@@ -79,7 +79,7 @@ const MoviesCarousel = ({ title, movies, isVertical }: MovieCarouselProps) => {
             <>
               {isScrolled && (
                 <Button
-                  className="dark:bg.white absolute left-4 z-10 hidden h-fit -translate-x-1/2 rounded-full bg-black bg-opacity-50 px-2 text-white sm:block xl:left-6 dark:text-black"
+                  className="dark:bg.white absolute left-4 z-10 hidden h-fit -translate-x-1/2 rounded-full bg-black/50 px-2  text-white sm:block xl:left-6 dark:bg-white/30 "
                   onClick={() => scroll('left')}
                 >
                   <ChevronLeft size={32} strokeWidth={3} />
@@ -87,7 +87,7 @@ const MoviesCarousel = ({ title, movies, isVertical }: MovieCarouselProps) => {
               )}
               {canScrollRight && (
                 <Button
-                  className="dark:bg.white absolute right-4 z-10 hidden h-fit translate-x-1/2 rounded-full bg-black bg-opacity-50 px-2 text-white sm:block dark:text-black"
+                  className="dark:bg.white absolute right-4 z-10 hidden h-fit translate-x-1/2 rounded-full bg-black/50 px-2  text-white sm:block dark:bg-white/30 "
                   onClick={() => scroll('right')}
                 >
                   <ChevronRight size={32} strokeWidth={3} />

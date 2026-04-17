@@ -2,19 +2,26 @@ import { Profile } from './Profile';
 
 // Props for the search page
 export interface SearchPageProps {
-  params: {
+  params: Promise<{
     term: string;
-  };
+  }>;
 }
 
 // Props for the genre page
 export interface GenrePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     genre: string;
-  };
+  }>;
+}
+
+// Props for the movie page
+export interface MoviePageProps {
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export interface NavBarProps {
@@ -60,9 +67,9 @@ export interface FormSuccessProps {
 
 // Props for the movie page
 export interface MoviePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 export interface ChangeAuthDetailsProps {
   isChangingEmail: boolean;
@@ -70,5 +77,3 @@ export interface ChangeAuthDetailsProps {
   setIsChangingEmail: (value: boolean) => void;
   setIsChangingPassword: (value: boolean) => void;
 }
-
-

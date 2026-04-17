@@ -23,7 +23,10 @@ import { UserModule } from './user/user.module';
     ProfilesModule,
     StripeModule,
     UserSubscriptionModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env.local', '.env'],
+    }),
   ],
   controllers: [],
   providers: [PrismaService],

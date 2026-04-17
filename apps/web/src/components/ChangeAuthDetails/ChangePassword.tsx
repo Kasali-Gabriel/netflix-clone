@@ -1,14 +1,14 @@
+import { CHANGE_USER_PASSWORD } from '@/graphql/mutations';
+import { useToast } from '@/hooks/use-toast';
+import useUser from '@/hooks/useGetUser';
+import { NewPasswordSchema } from '@/Schemas';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { CHANGE_USER_PASSWORD } from '../../graphql/mutations';
-import { useToast } from '../../hooks/use-toast';
-import useUser from '../../hooks/useGetUser';
-import { NewPasswordSchema } from '../../Schemas';
-import FormError from '../FormComponents/form-error';
+import FormError from '../Form/form-error';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import {

@@ -1,8 +1,8 @@
+import { GET_PAYMENT_METHOD_DETAILS } from '@/graphql/queries';
+import { ManageBillingProps } from '@/types/plan';
 import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import { useState } from 'react';
-import { GET_PAYMENT_METHOD_DETAILS } from '../../graphql/queries';
-import { ManageBillingProps } from '../../types/plan';
 import { Button } from '../ui/button';
 
 const ManageBilling = ({

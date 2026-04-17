@@ -1,5 +1,5 @@
+import { FormErrorProps } from '@/types/index';
 import { usePathname } from 'next/navigation';
-import { FormErrorProps } from '../../types';
 
 const FormError = ({ message }: FormErrorProps) => {
   const pathname = usePathname();

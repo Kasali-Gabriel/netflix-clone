@@ -1,5 +1,7 @@
 'use client';
 
+import useChangePage from '@/hooks/useChangePage';
+import { NavBarProps } from '@/types/index';
 import {
   faArrowLeftLong,
   faMagnifyingGlass,
@@ -10,11 +12,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChevronDownIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
-import useChangePage from '../../hooks/useChangePage';
-import { NavBarProps } from '../../types';
 import SignOutBtn from '../Buttons/SignOutBtn';
 import SearchInput from '../Inputs/SearchInput';
-import ProfileManager from '../ProfileComponent/ProfileManager';
+import ProfileManager from '../Profile/ProfileManager';
 import { Button } from '../ui/button';
 import {
   Sheet,

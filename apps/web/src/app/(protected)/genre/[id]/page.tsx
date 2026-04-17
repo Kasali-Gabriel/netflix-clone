@@ -1,27 +1,29 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import PaginationSection from '@/components/Filters/Pagination';
+import MoviesCarousel from '@/components/Movies/MoviesCarousel';
+import { getDiscoverGenre } from '@/lib/movieFetcher';
+import { GenrePageProps } from '@/types/index';
+import { Movie } from '@/types/Movie';
+import { use, useEffect, useState } from 'react';
 import { FadeLoader } from 'react-spinners';
-import PaginationSection from '../../../../components/Filters/Pagination';
-import MoviesCarousel from '../../../../components/MovieComponents/MoviesCarousel';
-import { getDiscoverGenre } from '../../../../lib/movieFetcher';
-import { GenrePageProps } from '../../../../types';
-import { Movie } from '../../../../types/Movie';
 
-const GenrePage = ({
-  params: { id },
-  searchParams: { genre },
-}: GenrePageProps) => {
+const GenrePage = ({ params, searchParams }: GenrePageProps) => {
+  const { id } = use(params) as { id: string };
+  const { genre } = use(searchParams) as { genre: string };
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [currentPage, setCurrentPage] = useState<number>(() => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  useEffect(() => {
     if (typeof window !== 'undefined' && window.sessionStorage) {
       const savedPage = sessionStorage.getItem(`currentPage-${id}`);
-      return savedPage ? parseInt(savedPage, 10) : 1;
+      if (savedPage) {
+        setCurrentPage(parseInt(savedPage, 10));
+      }
     }
-    return 1;
-  });
+  }, [id]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.sessionStorage) {

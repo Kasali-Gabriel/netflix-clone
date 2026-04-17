@@ -1,11 +1,11 @@
 'use client';
 
+import { useLikeMovie } from '@/hooks/useLikeMovie';
+import { Movie } from '@/types/Movie';
 import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { usePathname } from 'next/navigation';
-import { useLikeMovie } from '../../hooks/useLikeMovie';
-import { Movie } from '../../types/Movie';
-import { refetchLikedMovies } from '../MovieComponents/LikedMovies';
+import { refetchLikedMovies } from '../Movies/LikedMovies';
 import { Button } from '../ui/button';
 import Loader from './ButtonLoader';
 

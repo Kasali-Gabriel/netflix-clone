@@ -1,10 +1,8 @@
+import Providers from '@/components/Providers';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import type { Metadata } from 'next';
 import React from 'react';
-import { ApolloWrapper } from '../apollo/ApolloWrapper';
-import { UserProvider } from '../context/UserContext';
-import ReduxProvider from '../Redux/reduxProvider';
 import './globals.css';
 
 config.autoAddCss = false;
@@ -22,12 +20,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <ApolloWrapper>
-          <ReduxProvider>
-            <UserProvider>{children}</UserProvider>{' '}
-          </ReduxProvider>
-        </ApolloWrapper>
+      <body suppressHydrationWarning>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

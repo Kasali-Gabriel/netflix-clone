@@ -1,4 +1,4 @@
-import { NowPlaying } from '../../lib/movieFetcher';
+import { NowPlaying } from '@/lib/movieFetcher';
 import Carouselbanner from './Carouselbanner';
 
 async function CarouselBannerWrapper() {

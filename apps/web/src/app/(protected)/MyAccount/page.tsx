@@ -1,4 +1,4 @@
-import AccountComponent from '../../../components/Settings/AccountComponent';
+import AccountComponent from '@/components/Settings/AccountComponent';
 
 const AccountPage = () => {
   return <AccountComponent />;

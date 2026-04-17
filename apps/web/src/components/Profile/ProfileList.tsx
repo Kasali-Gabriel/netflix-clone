@@ -1,10 +1,10 @@
 'use client';
 
+import { ProfileListProps } from '@/types/Profile';
 import { MoreHorizontal, Pen, Trash } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
-import { ProfileListProps } from '../../types/Profile';
-import { refetchProfiles } from '../NavigationComponents/Header';
+import { refetchProfiles } from '../Navigation/Header';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip';
-import { ChangeProfileNameDialog, DeleteProfileDialog } from './Dialogue';
+import { ChangeProfileNameDialog, DeleteProfileDialog } from './Dialogs';
 
 export const ProfileList = ({
   profiles,

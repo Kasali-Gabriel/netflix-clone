@@ -1,5 +1,5 @@
-import MovieDetails from '../../../../components/MovieComponents/MovieDetails';
-import MoviesCarousel from '../../../../components/MovieComponents/MoviesCarousel';
+import MovieDetails from '@/components/Movies/MovieDetails';
+import MoviesCarousel from '@/components/Movies/MoviesCarousel';
 import {
   getCredits,
   getMovieCertification,
@@ -7,11 +7,11 @@ import {
   getMovieVideos,
   getRecommendations,
   getSimilarMovies,
-} from '../../../../lib/movieFetcher';
-import { MoviePageProps } from '../../../../types';
-getCredits;
+} from '@/lib/movieFetcher';
+import { MoviePageProps } from '@/types/index';
 
-const page = async ({ params: { id } }: MoviePageProps) => {
+const page = async (props: MoviePageProps) => {
+  const { id } = await props.params;
   const movie = await getMovieDetails(id);
 
   const similarMovies = await getSimilarMovies(id);
@@ -19,7 +19,7 @@ const page = async ({ params: { id } }: MoviePageProps) => {
   const maturityRating = await getMovieCertification(id);
   const credits = await getCredits(id);
 
-  const videoUrl = await getMovieVideos(id); // Fetch the trailer URL
+  const videoUrl = await getMovieVideos(id);
 
   return (
     <div className="flex flex-col p-2 py-10 sm:p-5 xl:pl-10 ">

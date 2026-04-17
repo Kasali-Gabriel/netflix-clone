@@ -4,13 +4,8 @@ import { ChevronRight } from 'lucide-react';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { setEmail } from '../../Redux/emailReducer';
-import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
-import { EmailSchema } from '../../Schemas';
-import { GET_USER_BY_EMAIL } from '../../graphql/queries';
-import useChangePage from '../../hooks/useChangePage';
 import Loader from '../Buttons/ButtonLoader';
-import FormError from '../FormComponents/form-error';
+import FormError from '../Form/form-error';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -20,6 +15,11 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
+import useChangePage from '@/hooks/useChangePage';
+import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
+import { EmailSchema } from '@/Schemas';
+import { GET_USER_BY_EMAIL } from '@/graphql/queries';
+import { setEmail } from '@/Redux/emailReducer';
 
 const EmailInput = () => {
   const changePage = useChangePage();
@@ -41,7 +41,7 @@ const EmailInput = () => {
 
   const { data, error: userError } = useQuery(GET_USER_BY_EMAIL, {
     variables: { email },
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'network-only',
   });
 
   const onSubmit = () => {

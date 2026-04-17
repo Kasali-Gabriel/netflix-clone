@@ -1,5 +1,5 @@
+import { HomeScreenRowsProps } from '@/types/index';
 import Image from 'next/image';
-import { HomeScreenRowsProps } from '../../types';
 
 const HomeScreenRows = ({
   h1,

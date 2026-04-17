@@ -2,10 +2,10 @@ import { SquareArrowOutUpRight } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useContext, useState, useTransition } from 'react';
 import { ClipLoader } from 'react-spinners';
-import { UserContext } from '../../context/UserContext';
-import { deleteSession } from '../../lib/session';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader } from '../ui/dialog';
+import { UserContext } from '@/context/UserContext';
+import { deleteSession } from '@/lib/session';
 
 const SignOutBtn = () => {
   const [isPending, startTransition] = useTransition();

@@ -1,12 +1,7 @@
 import { useMutation } from '@apollo/client';
 import Image from 'next/image';
 import { useState } from 'react';
-import { DELETE_PROFILE, RENAME_PROFILE } from '../../graphql/mutations';
-import {
-  ChangeProfileNameDialogProps,
-  DeleteProfileDialogProps,
-  ProfileDialogProps,
-} from '../../types/Profile';
+
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -18,6 +13,8 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { ChangeProfileNameDialogProps, DeleteProfileDialogProps, ProfileDialogProps } from '@/types/Profile';
+import { DELETE_PROFILE, RENAME_PROFILE } from '@/graphql/mutations';
 
 export const ProfileDialog = ({
   profileName,

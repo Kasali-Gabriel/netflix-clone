@@ -1,13 +1,13 @@
 'use client';
 
+import useChangePage from '@/hooks/useChangePage';
+import { getImagePath } from '@/lib/utils';
+import { Movie } from '@/types/Movie';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
-import useChangePage from '../../hooks/useChangePage';
-import { getImagePath } from '../../lib/utils';
-import { Movie } from '../../types/Movie';
 import MyList from '../Buttons/MyList';
 import { Button } from '../ui/button';
 

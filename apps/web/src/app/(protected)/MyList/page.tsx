@@ -1,10 +1,10 @@
+import LikedMovies from '@/components/Movies/LikedMovies';
+import { getPopularMovies } from '@/lib/movieFetcher';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import LikedMovies from '../../../components/MovieComponents/LikedMovies';
-import { getPopularMovies } from '../../../lib/movieFetcher';
 
 export default async function MyListPage() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const profileId = cookieStore.get('profileId')?.value;
 
   if (!profileId) {

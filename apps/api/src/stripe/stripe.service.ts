@@ -33,7 +33,8 @@ export class StripeService {
         endpointSecret,
       );
     } catch (err) {
-      throw new Error(`Webhook signature verification failed: ${err.message}`);
+      const message = err instanceof Error ? err.message : String(err);
+      throw new Error(`Webhook signature verification failed: ${message}`);
     }
   }
 

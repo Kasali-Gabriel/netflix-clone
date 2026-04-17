@@ -1,9 +1,9 @@
 'use client';
 
+import useChangePage from '@/hooks/useChangePage';
 import { useTransition } from 'react';
-import useChangePage from '../../hooks/useChangePage';
-import { Button } from '../ui/button';
 import Loader from './ButtonLoader';
+import { Button } from '../ui/button';
 
 interface LoginButtonProps {
   className?: string;

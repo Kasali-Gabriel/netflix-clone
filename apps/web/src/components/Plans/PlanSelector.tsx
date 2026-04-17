@@ -2,22 +2,15 @@ import { useMutation } from '@apollo/client';
 import { CheckCircle2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  CREATE_SUBSCRIPTION,
-  UPDATE_SUBSCRIPTION,
-} from '../../graphql/mutations';
-import { useToast } from '../../hooks/use-toast';
-import {
-  Plan,
-  PlanSelectorProps,
-  SelectedPlan,
-  UserSubscription,
-} from '../../types/plan';
+
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { getSession } from './../../lib/session';
 import { planData } from './planData';
+import { Plan, PlanSelectorProps, SelectedPlan, UserSubscription } from '@/types/plan';
+import { useToast } from '@/hooks/use-toast';
+import { CREATE_SUBSCRIPTION, UPDATE_SUBSCRIPTION } from '@/graphql/mutations';
+import { getSession } from '@/lib/session';
 
 const PlanSelector = ({
   activePlan,

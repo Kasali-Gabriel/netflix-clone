@@ -1,11 +1,11 @@
 'use client';
 
+import LoginButton from '@/components/Buttons/LoginButton';
+import Footer from '@/components/Footer';
+import CallToAction from '@/components/Inputs/CallToAction';
+import Faq from '@/components/LandingPageInfo/Faq';
+import HomeScreenRows from '@/components/LandingPageInfo/HomeScreenRows';
 import Image from 'next/image';
-import LoginButton from '../components/Buttons/LoginButton';
-import Footer from '../components/Footer/Footer';
-import CallToAction from '../components/Inputs/CallToAction';
-import Faq from '../components/LandingPageInfo/Faq';
-import HomeScreenRows from '../components/LandingPageInfo/HomeScreenRows';
 
 const Home = () => {
   return (

@@ -1,14 +1,14 @@
+import { CHANGE_USER_EMAIL } from '@/graphql/mutations';
+import { GET_USER_BY_ID } from '@/graphql/queries';
+import { useToast } from '@/hooks/use-toast';
+import useUser from '@/hooks/useGetUser';
+import { NewEmailSchema } from '@/Schemas';
 import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { CHANGE_USER_EMAIL } from '../../graphql/mutations';
-import { GET_USER_BY_ID } from '../../graphql/queries';
-import { useToast } from '../../hooks/use-toast';
-import useUser from '../../hooks/useGetUser';
-import { NewEmailSchema } from '../../Schemas';
-import FormError from '../FormComponents/form-error';
+import FormError from '../Form/form-error';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import {

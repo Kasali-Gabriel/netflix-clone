@@ -3,9 +3,9 @@
 import { useQuery } from '@apollo/client';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { GET_LIKED_MOVIES } from '../../graphql/queries';
-import { Movie } from '../../types/Movie';
 import MoviesCarousel from './MoviesCarousel';
+import { Movie } from '@/types/Movie';
+import { GET_LIKED_MOVIES } from '@/graphql/queries';
 
 let refetchLikedMovies: () => void;
 

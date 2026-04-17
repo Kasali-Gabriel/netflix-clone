@@ -6,30 +6,26 @@ import { Check, CheckCircle2Icon } from 'lucide-react';
 import { useContext, useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import Loader from '../../../components/Buttons/ButtonLoader';
-import FormError from '../../../components/FormComponents/form-error';
-import FormSuccess from '../../../components/FormComponents/form-success';
-import { Button } from '../../../components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '../../../components/ui/card';
+
+import Loader from '@/components/Buttons/ButtonLoader';
+import FormError from '@/components/Form/form-error';
+import FormSuccess from '@/components/Form/form-success';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '../../../components/ui/form';
-import { Input } from '../../../components/ui/input';
-import { UserContext } from '../../../context/UserContext';
-import { REGISTER_USER, USER_LOGIN } from '../../../graphql/mutations';
-import useChangePage from '../../../hooks/useChangePage';
-import { createSession } from '../../../lib/session';
-import { useAppSelector } from '../../../Redux/hooks';
-import { PasswordSchema } from '../../../Schemas';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { UserContext } from '@/context/UserContext';
+import { REGISTER_USER, USER_LOGIN } from '@/graphql/mutations';
+import useChangePage from '@/hooks/useChangePage';
+import { createSession } from '@/lib/session';
+import { useAppSelector } from '@/Redux/hooks';
+import { PasswordSchema } from '@/Schemas';
 
 const Page = () => {
   const changePage = useChangePage();

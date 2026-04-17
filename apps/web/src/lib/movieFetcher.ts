@@ -1,4 +1,4 @@
-import { fetchFromTMDB } from "./tmdbClient";
+import { fetchFromTMDB } from './tmdbClient';
 
 const apiCache: { [key: string]: { data: any; expiry: number } } = {};
 
@@ -125,14 +125,15 @@ export async function getCredits(id: string) {
     `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
   );
   const data = await fetchFromTMDB(url);
+  if (!data) return { Director: [], Writer: [], castNames: [] };
 
-  const Director = data.crew
+  const Director = (data.crew || [])
     .filter((member: { job: string }) => member.job === 'Director')
     .map((director: { name: string }) => director.name);
-  const Writer = data.crew
+  const Writer = (data.crew || [])
     .filter((member: { job: string }) => member.job === 'Writer')
     .map((writer: { name: string }) => writer.name);
-  const castNames = data.cast.map(
+  const castNames = (data.cast || []).map(
     (castMember: { name: string }) => castMember.name,
   );
 

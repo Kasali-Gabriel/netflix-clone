@@ -1,14 +1,32 @@
-'use server';
-
+import { jwtVerify } from 'jose';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkSubscription } from './lib/checkSubscription';
-import { getSession } from './lib/session';
+import type { Session } from './lib/session';
 import { authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoute } from './routes';
+
+const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY!;
+const encodedKey = new TextEncoder().encode(secretKey);
+
+async function getSessionFromRequest(
+  req: NextRequest,
+): Promise<Session | null> {
+  const sessionCookie = req.cookies.get('session')?.value;
+  if (!sessionCookie) return null;
+
+  try {
+    const { payload } = await jwtVerify(sessionCookie, encodedKey, {
+      algorithms: ['HS256'],
+    });
+    return payload as Session;
+  } catch {
+    return null;
+  }
+}
 
 export default async function middleware(req: NextRequest) {
   console.log('Middleware invoked');
 
-  const session = await getSession();
+  const session = await getSessionFromRequest(req);
   const user = session?.user;
   const isSubscribed = user ? await checkSubscription(user.id) : false;
   const nextUrl = req.nextUrl;

@@ -7,9 +7,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { GET_PROFILE, GET_PROFILES } from '../../graphql/queries';
-import useChangePage from '../../hooks/useChangePage';
-import { Profile } from '../../types/Profile';
 import GenreDropdown from '../Filters/GenreDropdown';
 import { Button } from '../ui/button';
 import {
@@ -20,6 +17,10 @@ import {
   SheetTrigger,
 } from '../ui/sheet';
 import NavBar from './NavBar';
+import useChangePage from '@/hooks/useChangePage';
+import { Profile } from '@/types/Profile';
+import { GET_PROFILE, GET_PROFILES } from '@/graphql/queries';
+
 interface HeaderProps {
   profileId: string;
   userId: string;

@@ -1,11 +1,11 @@
 'use client';
 
+import { useAddProfile } from '@/hooks/useAddProfile';
+import { useProfileClick } from '@/hooks/useProfileClick';
+import { ProfileManagerProps } from '@/types/Profile';
 import { ChevronsUpDownIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
-import { useAddProfile } from '../../hooks/useAddProfile';
-import { useProfileClick } from '../../hooks/useProfileClick';
-import { ProfileManagerProps } from '../../types/Profile';
 import { ThemeToggler } from '../Theme/ThemeToggler';
 import {
   Collapsible,
@@ -13,7 +13,7 @@ import {
   CollapsibleTrigger,
 } from '../ui/collapsible';
 import { AddProfileCard } from './AddProfileCard';
-import { ProfileDialog } from './Dialogue';
+import { ProfileDialog } from './Dialogs';
 import { ProfileList } from './ProfileList';
 
 export const ProfileManager = ({

@@ -1,7 +1,7 @@
+import { cn, getImagePath } from '@/lib/utils';
+import { MovieCardProps } from '@/types/Movie';
 import Image from 'next/image';
 import Link from 'next/link';
-import { cn, getImagePath } from '../../lib/utils';
-import { MovieCardProps } from '../../types/Movie';
 
 const MovieCard = ({ movie, isVertical }: MovieCardProps) => {
   return (

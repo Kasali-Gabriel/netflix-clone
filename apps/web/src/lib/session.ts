@@ -20,7 +20,8 @@ export async function createSession(payload: Session) {
     .setExpirationTime('7d')
     .sign(encodedKey);
 
-  cookies().set('session', session, {
+  const cookieStore = await cookies();
+  cookieStore.set('session', session, {
     expires: expiredAt,
     httpOnly: true,
     sameSite: 'lax',
@@ -30,7 +31,8 @@ export async function createSession(payload: Session) {
 }
 
 export async function getSession() {
-  const cookie = cookies().get('session')?.value;
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get('session')?.value;
   if (!cookie) return null;
 
   const { payload } = await jwtVerify(cookie, encodedKey, {
@@ -41,5 +43,6 @@ export async function getSession() {
 }
 
 export async function deleteSession() {
-  cookies().delete('session');
+  const cookieStore = await cookies();
+  cookieStore.delete('session');
 }

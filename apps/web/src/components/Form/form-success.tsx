@@ -1,4 +1,4 @@
-import { FormSuccessProps } from '../../types';
+import { FormSuccessProps } from '@/types/index';
 
 const FormSuccess = ({ message }: FormSuccessProps) => {
   if (!message) return null;
