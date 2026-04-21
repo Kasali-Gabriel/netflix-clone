@@ -16,7 +16,6 @@ export class StripeService {
     private readonly userService: UserService,
   ) {
     this.stripe = new Stripe(process.env.STRIPE_API_KEY as string, {
-      apiVersion: '2025-02-24.acacia',
       typescript: true,
     });
   }
