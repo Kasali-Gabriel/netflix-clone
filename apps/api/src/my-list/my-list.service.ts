@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { v4 as uuidv4 } from 'uuid';
 import { MyListInput } from './Dto/create-myList.input';
 
 @Injectable()
@@ -8,16 +7,14 @@ export class MyListService {
   constructor(private readonly prisma: PrismaService) {}
 
   async addMovieToList(myListInput: MyListInput) {
-    const { ...myList } = myListInput;
     return this.prisma.myList.create({
       data: {
-        id: uuidv4(),
-        ...myList,
+        ...myListInput,
       },
     });
   }
 
-  async getLikedMovie(profileId: string, movieId: string) {
+  async getLikedMovie(profileId: string, movieId: number) {
     return this.prisma.myList.findUnique({
       where: {
         profileId_movieId: { profileId, movieId },
@@ -31,7 +28,7 @@ export class MyListService {
     });
   }
 
-  async removeMovieFromList(profileId: string, movieId: string) {
+  async removeMovieFromList(profileId: string, movieId: number) {
     return this.prisma.myList.delete({
       where: {
         profileId_movieId: { profileId, movieId },

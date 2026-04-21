@@ -1,17 +1,16 @@
+import { UserContext } from '@/context/UserContext';
+import { deleteSession } from '@/lib/session';
 import { SquareArrowOutUpRight } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useContext, useState, useTransition } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader } from '../ui/dialog';
-import { UserContext } from '@/context/UserContext';
-import { deleteSession } from '@/lib/session';
 
 const SignOutBtn = () => {
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const pathName = usePathname();
-  const router = useRouter();
   const { setUser } = useContext(UserContext);
 
   const notAuth = pathName
@@ -22,7 +21,7 @@ const SignOutBtn = () => {
     startTransition(async () => {
       await deleteSession();
       setUser(null);
-      router.refresh();
+      window.location.href = '/SignIn';
     });
   };
 

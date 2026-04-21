@@ -1,3 +1,5 @@
+'use client';
+
 import { MovieDetailsProps } from '@/types/Movie';
 import MyList from '../Buttons/MyList';
 import ShowMoreText from '../Buttons/ShowMore';
@@ -26,17 +28,15 @@ const getMaturityRatingDescription = (rating: string) => {
       return 'Restricted';
     case 'NC-17':
       return 'Adults Only';
+    default:
+      return 'Not Rated';
   }
 };
 
 const getVoteAverageClass = (voteAverage: number) => {
-  if (voteAverage >= 7) {
-    return 'bg-green-500 text-white';
-  } else if (voteAverage >= 5) {
-    return 'bg-yellow-500 text-black';
-  } else {
-    return 'bg-red-500 text-white';
-  }
+  if (voteAverage >= 7) return 'bg-green-500 text-white';
+  if (voteAverage >= 5) return 'bg-yellow-500 text-black';
+  return 'bg-red-500 text-white';
 };
 
 const MovieDetails = ({
@@ -44,6 +44,8 @@ const MovieDetails = ({
   maturityRating,
   credits,
 }: MovieDetailsProps) => {
+  const hasEnoughVotes = (movie.vote_count ?? 0) >= 100;
+
   return (
     <div className="flex flex-col">
       {movie.title && (
@@ -54,12 +56,14 @@ const MovieDetails = ({
 
       <div className="mb-2 flex items-center justify-between">
         <div className="mb-2 flex flex-row items-center space-x-7 xl:space-x-10">
+          {/* Year */}
           {movie.release_date && (
             <p className="text-xl font-medium">
               {movie.release_date.split('-')[0]}
             </p>
           )}
 
+          {/* Maturity */}
           {maturityRating && (
             <TooltipProvider>
               <Tooltip>
@@ -75,32 +79,36 @@ const MovieDetails = ({
             </TooltipProvider>
           )}
 
-          {movie.runtime && (
+          {/* Runtime */}
+          {typeof movie.runtime === 'number' && (
             <p className="text-lg font-medium">
               {formatRuntime(movie.runtime)}
             </p>
           )}
 
-          {movie.vote_average &&
-            movie.vote_average !== 0 &&
-            movie.vote_count >= 100 && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <p
-                      className={`cursor-pointer rounded-md border px-1 py-0 font-medium ${getVoteAverageClass(
-                        movie.vote_average,
-                      )}`}
-                    >
-                      {movie.vote_average.toFixed(2)}
-                    </p>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Avg Rating</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
+          {typeof movie.vote_average === 'number' && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <p
+                    className={`cursor-pointer rounded-md border px-1 py-0 font-medium ${getVoteAverageClass(
+                      movie.vote_average,
+                    )}`}
+                  >
+                    {movie.vote_average.toFixed(2)}
+                  </p>
+                </TooltipTrigger>
+
+                <TooltipContent>
+                  <p>
+                    {hasEnoughVotes
+                      ? 'Avg Rating'
+                      : `Limited votes (${movie.vote_count ?? 0})`}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
 
         <div className="-mt-4 hidden sm:block xl:hidden">
@@ -108,9 +116,10 @@ const MovieDetails = ({
         </div>
       </div>
 
+      {/* Overview */}
       {movie.overview && (
         <div className="mb-1.5 text-lg">
-          <ShowMoreText maxLength={170} text={movie.overview} />{' '}
+          <ShowMoreText maxLength={170} text={movie.overview} />
         </div>
       )}
 
@@ -118,51 +127,55 @@ const MovieDetails = ({
         <MyList movie={movie} />
       </div>
 
-      {movie.genres && movie.genres.length > 0 && (
+      {/* Genres */}
+      {Array.isArray(movie.genres) && movie.genres.length > 0 && (
         <p className="mb-0.5 text-lg">
           <span className="font-medium">Genre: </span>
-          {movie.genres.map((genre: { name: any }) => genre.name).join(', ')}
+          {movie.genres.map((g) => g.name).join(', ')}
         </p>
       )}
 
-      {credits.Director && credits.Director.length > 0 && (
+      {/* Director */}
+      {credits?.Director?.length > 0 && (
         <p className="text-lg">
           <span className="font-medium">Director: </span>
           {credits.Director.join(', ')}
         </p>
       )}
 
-      {credits.Writer && credits.Writer.length > 0 && (
+      {/* Writer */}
+      {credits?.Writer?.length > 0 && (
         <p className="text-lg">
           <span className="font-medium">Writer: </span>
           {credits.Writer.join(', ')}
         </p>
       )}
 
-      {credits.castNames && credits.castNames.length > 0 && (
+      {/* Cast */}
+      {credits?.castNames?.length > 0 && (
         <p className="mb-1.5 inline text-lg">
           <span className="mr-2 font-medium">Starring:</span>
           <ShowMoreText maxLength={120} text={credits.castNames.join(', ')} />
         </p>
       )}
 
-      {movie.production_companies && movie.production_companies.length > 0 && (
-        <p className="mb-0.5 text-lg">
-          <span className="font-medium">Studios: </span>
-          {movie.production_companies
-            .map((company: { name: string }) => company.name)
-            .join(', ')}
-        </p>
-      )}
+      {/* Studios */}
+      {Array.isArray(movie.production_companies) &&
+        movie.production_companies.length > 0 && (
+          <p className="mb-0.5 text-lg">
+            <span className="font-medium">Studios: </span>
+            {movie.production_companies.map((c) => c.name).join(', ')}
+          </p>
+        )}
 
-      {movie.production_countries && movie.production_countries.length > 0 && (
-        <p className="text-lg">
-          <span className="font-medium">Production Country: </span>
-          {movie.production_countries
-            .map((country: { name: string }) => country.name)
-            .join(', ')}
-        </p>
-      )}
+      {/* Countries */}
+      {Array.isArray(movie.production_countries) &&
+        movie.production_countries.length > 0 && (
+          <p className="text-lg">
+            <span className="font-medium">Production Country: </span>
+            {movie.production_countries.map((c) => c.name).join(', ')}
+          </p>
+        )}
     </div>
   );
 };

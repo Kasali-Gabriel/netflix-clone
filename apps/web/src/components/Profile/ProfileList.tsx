@@ -1,10 +1,10 @@
 'use client';
 
+import { UserContext } from '@/context/UserContext';
 import { ProfileListProps } from '@/types/Profile';
 import { MoreHorizontal, Pen, Trash } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
-import { refetchProfiles } from '../Navigation/Header';
+import { useContext, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +26,7 @@ export const ProfileList = ({
   profiles,
   handleProfileClick,
   setIsProfileOpen,
+  setSwitchingProfile,
 }: ProfileListProps) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
@@ -37,10 +38,6 @@ export const ProfileList = ({
 
   const handleCloseDeleteDialog = () => {
     setIsDeleteDialogOpen(false);
-  };
-
-  const handleDeleteSuccess = () => {
-    refetchProfiles();
   };
 
   const [isChangeNameDialogOpen, setIsChangeNameDialogOpen] = useState(false);
@@ -61,9 +58,8 @@ export const ProfileList = ({
     setIsChangeNameDialogOpen(false);
   };
 
-  const handleChangeSuccess = () => {
-    refetchProfiles();
-  };
+  const { user } = useContext(UserContext);
+  const userId = user?.id;
 
   return (
     <>
@@ -72,8 +68,7 @@ export const ProfileList = ({
           <button
             className="flex items-center justify-start text-lg transition-all duration-100 sm:hover:scale-105"
             onClick={() => {
-              handleProfileClick(p);
-              setIsProfileOpen(false);
+              handleProfileClick(p, setSwitchingProfile, setIsProfileOpen);
             }}
           >
             <Image
@@ -128,7 +123,7 @@ export const ProfileList = ({
                 <DeleteProfileDialog
                   profileId={profileToDelete}
                   onClose={handleCloseDeleteDialog}
-                  onDeleteSuccess={handleDeleteSuccess}
+                  userId={userId ?? ''}
                 />
               )}
 
@@ -139,7 +134,7 @@ export const ProfileList = ({
                     profileId={profileToChangeName}
                     oldName={oldProfileName}
                     onClose={handleCloseChangeNameDialog}
-                    onChangeSuccess={handleChangeSuccess}
+                    userId={userId ?? ''}
                   />
                 )}
             </Tooltip>

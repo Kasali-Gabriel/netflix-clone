@@ -19,10 +19,11 @@ import { ProfileList } from './ProfileList';
 export const ProfileManager = ({
   profile,
   profiles,
-  setProfiles,
+  refreshProfiles,
   isLoading,
   setIsProfileOpen,
   userId,
+  setSwitchingProfile,
 }: ProfileManagerProps) => {
   useState<string | null>(null);
   const [profileName, setProfileName] = useState('');
@@ -34,11 +35,12 @@ export const ProfileManager = ({
   const handleCloseModal = () => setIsModalOpen(false);
 
   const { handleProfileClick } = useProfileClick();
-  const { handleAddProfile, isPending } = useAddProfile(
+  const { handleAddProfile, isAdding: isPending } = useAddProfile(
     profileName,
     selectedImage || '',
-    setProfiles,
+    refreshProfiles,
     userId || '',
+    setSwitchingProfile,
   );
 
   const profilesLength = profiles.length + (profile ? 1 : 0);
@@ -68,14 +70,18 @@ export const ProfileManager = ({
 
         <CollapsibleContent>
           <div className="mt-2 border-b border-gray-400" />
+         
           <ProfileList
             profiles={profiles}
             handleProfileClick={handleProfileClick}
+            setSwitchingProfile={setSwitchingProfile}
             setIsProfileOpen={setIsProfileOpen}
           />
+
           {profilesLength < 4 && !isLoading && (
             <div className="mt-2 flex justify-start">
               <AddProfileCard onClick={handleOpenModal} />
+
               <ProfileDialog
                 isPending={isPending}
                 profileName={profileName}

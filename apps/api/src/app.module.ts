@@ -7,6 +7,7 @@ import { MyListModule } from './my-list/my-list.module';
 import { PrismaService } from './prisma/prisma.service';
 import { ProfilesModule } from './profiles/profiles.module';
 import { StripeModule } from './stripe/stripe.module';
+import { TmdbModule } from './tmdb/tmdb.module';
 import { UserSubscriptionModule } from './user-subscription/user-subscription.module';
 import { UserModule } from './user/user.module';
 
@@ -22,6 +23,7 @@ import { UserModule } from './user/user.module';
     MyListModule,
     ProfilesModule,
     StripeModule,
+    TmdbModule,
     UserSubscriptionModule,
     ConfigModule.forRoot({
       isGlobal: true,

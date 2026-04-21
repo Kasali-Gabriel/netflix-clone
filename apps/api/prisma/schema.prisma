@@ -24,13 +24,14 @@ model Profile {
 }
 
 model MyList {
-  id               String  @id
+  id               String @id @default(uuid())
   profileId        String
-  movieId          String
+  movieId          Int
   movieTitle       String
   movieReleaseDate String
   moviePosterPath  String
-  profile          Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@unique([profileId, movieId])
 }

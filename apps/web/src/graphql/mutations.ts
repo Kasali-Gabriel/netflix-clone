@@ -55,7 +55,7 @@ export const ADD_MOVIE_TO_LIST = gql`
 `;
 
 export const REMOVE_MOVIE_FROM_LIST = gql`
-  mutation RemoveMovieFromList($profileId: String!, $movieId: String!) {
+  mutation RemoveMovieFromList($profileId: String!, $movieId: Int!) {
     removeMovieFromList(profileId: $profileId, movieId: $movieId) {
       id
     }

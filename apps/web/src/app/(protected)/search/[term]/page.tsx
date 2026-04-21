@@ -3,22 +3,31 @@
 import PaginationSection from '@/components/Filters/Pagination';
 import MoviesCarousel from '@/components/Movies/MoviesCarousel';
 import { getPopularMovies, getSearchMovies } from '@/lib/movieFetcher';
-import { SearchPageProps } from '@/types/index';
 import { Movie } from '@/types/Movie';
 import { use, useEffect, useState } from 'react';
 import { FadeLoader } from 'react-spinners';
 
-const SearchPage = ({ params }: SearchPageProps) => {
-  const { term } = use(params) as { term: string };
+type Params = {
+  term: string;
+};
+
+type Props = {
+  params: Promise<Params>;
+};
+
+const SearchPage = ({ params }: Props) => {
+  const { term } = use(params); 
+  
   const termToUse = decodeURI(term);
+
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(() => {
     if (typeof window !== 'undefined') {
-      const savedPage = sessionStorage.getItem(`currentPage-${termToUse}`);
-      return savedPage ? parseInt(savedPage, 10) : 1;
+      const saved = sessionStorage.getItem(`currentPage-${termToUse}`);
+      return saved ? parseInt(saved, 10) : 1;
     }
     return 1;
   });
@@ -35,14 +44,14 @@ const SearchPage = ({ params }: SearchPageProps) => {
   useEffect(() => {
     const fetchMovies = async () => {
       setLoading(true);
+
       const { fetchedMovies, totalPages } = await getSearchMovies(termToUse);
 
       setTotalPages(totalPages);
       setMovies(
-        (fetchedMovies[currentPage - 1] || []).filter(
-          (movie: Movie) => movie !== null,
-        ) as Movie[],
+        (fetchedMovies[currentPage - 1] || []).filter(Boolean) as Movie[],
       );
+
       setLoading(false);
     };
 
@@ -50,18 +59,13 @@ const SearchPage = ({ params }: SearchPageProps) => {
   }, [termToUse, currentPage]);
 
   useEffect(() => {
-    const fetchPopularMovies = async () => {
-      const movies = await getPopularMovies();
-      setPopularMovies(movies);
+    const fetchPopular = async () => {
+      const data = await getPopularMovies();
+      setPopularMovies(data);
     };
 
-    fetchPopularMovies();
+    fetchPopular();
   }, []);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   if (loading) {
     return (
@@ -73,34 +77,29 @@ const SearchPage = ({ params }: SearchPageProps) => {
 
   return (
     <div className="mx-auto pt-20 sm:pt-24 md:pt-32 lg:pt-28">
-      <div className="flex flex-col space-y-4">
-        <div>
-          <h1 className="w-full px-4 text-left text-2xl sm:text-3xl md:text-5xl">
-            results for your search{' '}
-            <span className="font-bold italic">"{termToUse}"</span>
-          </h1>
+      <h1 className="w-full px-4 text-left text-2xl sm:text-3xl md:text-5xl">
+        results for <span className="font-bold italic">"{termToUse}"</span>
+      </h1>
 
-          <MoviesCarousel movies={movies} isVertical />
+      <MoviesCarousel movies={movies} isVertical />
 
-          {totalPages > 1 && (
-            <PaginationSection
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              totalPages={totalPages}
-            />
-          )}
-        </div>
+      {totalPages > 1 && (
+        <PaginationSection
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )}
 
-        {movies.length === 0 && (
-          <div>
-            <h2 className="xl:text:5xl px-6 text-xl font-bold md:text-3xl xl:px-10">
-              Others you might like
-            </h2>
+      {movies.length === 0 && (
+        <>
+          <h2 className="xl:text:5xl px-6 text-xl font-bold md:text-3xl xl:px-10">
+            Others you might like
+          </h2>
 
-            <MoviesCarousel movies={popularMovies} />
-          </div>
-        )}
-      </div>
+          <MoviesCarousel movies={popularMovies} />
+        </>
+      )}
     </div>
   );
 };

@@ -58,7 +58,7 @@ const SearchInput = ({
                   placeholder="Search..."
                   {...field}
                   ref={inputRef}
-                  className=" mx-0 mb-2 h-14 w-screen max-w-[95vw] rounded-3xl border-none bg-stone-100 pl-12 text-xl text-black placeholder:text-stone-400 focus:border-none focus-visible:ring-0 focus-visible:ring-offset-0 md:pr-10 xl:w-96 xl:pl-5 dark:bg-stone-500 dark:text-white"
+                  className=" mx-0 mb-2 h-14 w-screen max-w-[95vw] rounded-3xl border-none bg-stone-100 pl-12 text-xl text-black placeholder:text-stone-400 focus:border-none focus-visible:ring-0 focus-visible:ring-offset-0 md:pr-10 xl:w-96 xl:pl-5 dark:bg-stone-400 dark:text-white"
                 />
               </FormControl>
             </FormItem>

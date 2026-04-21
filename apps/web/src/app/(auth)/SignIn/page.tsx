@@ -25,8 +25,9 @@ import { createSession } from '@/lib/session';
 import { LoginSchema } from '@/Schemas';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
-import { useContext, useState, useTransition } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -39,53 +40,64 @@ const Page = () => {
     },
   });
 
-  const [isPending, startTransition] = useTransition();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | undefined>('');
   const changePage = useChangePage();
   const { setUser } = useContext(UserContext);
 
-  const [userLogin] = useMutation(USER_LOGIN, {
-    onCompleted: async (data) => {
-      if (data) {
-        await createSession({
-          user: { id: data.userLogin.id, email: data.userLogin.email },
-          accessToken: data.userLogin.accessToken,
-          refreshToken: data.userLogin.refreshToken,
-        });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | undefined>('');
+  const [loading, setLoading] = useState(false);
 
-        setUser({ id: data.userLogin.id, email: data.userLogin.email });
-        changePage('/profiles');
-      }
-      setLoading(false);
-    },
-    onError: (error) => {
-      setError(error?.message || 'An error occurred');
-      setLoading(false);
-    },
-  });
-
-  const isFormValid = form.watch('email') && form.watch('password');
+  const [userLogin] = useMutation(USER_LOGIN);
 
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+    if (loading) return;
+
     setError('');
     setLoading(true);
 
-    values.email = values.email.toLowerCase();
+    try {
+      const validated = LoginSchema.safeParse(values);
 
-    const validatedFields = LoginSchema.safeParse(values);
+      if (!validated.success) {
+        setError('Invalid credentials');
+        setLoading(false);
+        return;
+      }
 
-    if (!validatedFields.success) {
-      setError('Invalid credentials');
+      const { email, password } = validated.data;
+
+      const { data } = await userLogin({
+        variables: {
+          email: email.toLowerCase(),
+          password,
+        },
+      });
+
+      if (!data?.userLogin) throw new Error('Login failed');
+
+      await createSession({
+        user: {
+          id: data.userLogin.id,
+          email: data.userLogin.email,
+        },
+        accessToken: data.userLogin.accessToken,
+        refreshToken: data.userLogin.refreshToken,
+      });
+
+      setUser({
+        id: data.userLogin.id,
+        email: data.userLogin.email,
+      });
+
+      // ensure state updates flush before navigation
+      requestAnimationFrame(() => {
+        changePage('/profiles');
+      });
+    } catch (err: any) {
+      setError(err?.message || 'An error occurred');
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const { email, password } = validatedFields.data;
-
-    startTransition(() => {
-      userLogin({ variables: { email, password } });
-    });
   };
 
   return (
@@ -112,6 +124,7 @@ const Page = () => {
                   Sign In
                 </CardTitle>
               </CardHeader>
+
               <CardContent>
                 <FormError message={error} />
 
@@ -125,7 +138,7 @@ const Page = () => {
                           <FormControl>
                             <Input
                               {...field}
-                              disabled={isPending}
+                              disabled={loading}
                               type="email"
                               className="my-4 h-16 rounded border-white bg-gray-200/10 text-lg text-white"
                               placeholder="Email or mobile number"
@@ -142,13 +155,31 @@ const Page = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <Input
-                              {...field}
-                              disabled={isPending}
-                              className="f my-4 h-16 rounded border-white bg-gray-200/10 text-lg text-white"
-                              placeholder="Password"
-                              type="password"
-                            />
+                            <div className="relative">
+                              <Input
+                                {...field}
+                                disabled={loading}
+                                className="my-4 h-16 rounded border-white bg-gray-200/10 pr-12 text-lg text-white"
+                                placeholder="Password"
+                                type={showPassword ? 'text' : 'password'}
+                                autoComplete="current-password"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={() => setShowPassword((v) => !v)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 "
+                              >
+                                {showPassword ? (
+                                  <EyeOff
+                                    size={20}
+                                    className="text-neutral-500"
+                                  />
+                                ) : (
+                                  <Eye size={20} className="text-neutral-500" />
+                                )}
+                              </button>
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -157,8 +188,7 @@ const Page = () => {
 
                     <Button
                       type="submit"
-                      onClick={() => onSubmit(form.getValues())}
-                      disabled={isPending || !isFormValid || loading}
+                      disabled={loading}
                       className="mt-2 h-10 w-full bg-[#CC0000] text-lg font-bold text-white hover:bg-[#990000]"
                     >
                       {loading ? <Loader /> : 'Sign in'}
@@ -176,6 +206,7 @@ const Page = () => {
                   </span>
                 </p>
               </CardContent>
+
               <CardFooter>
                 <p className="text-gray-400">
                   This page is protected by Google reCAPTCHA to ensure

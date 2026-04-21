@@ -54,7 +54,7 @@ type Mutation {
   createUserSubscription(createUserSubscriptionInput: CreateUserSubscriptionInput!): UserSubscription!
   deleteProfile(id: String!): Profile!
   registerUser(createUserInput: CreateUserInput!): User!
-  removeMovieFromList(movieId: String!, profileId: String!): MyList!
+  removeMovieFromList(movieId: Int!, profileId: String!): MyList!
   renameProfile(id: String!, name: String!): Profile!
   updateSubscription(updateUserSubscriptionInput: UpdateUserSubscriptionInput!): Boolean!
   updateUserSubscription(updateSubscriptionInput: UpdateUserSubscriptionInput!): UserSubscription!
@@ -63,7 +63,7 @@ type Mutation {
 
 type MyList {
   id: String!
-  movieId: String!
+  movieId: Float!
   moviePosterPath: String!
   movieReleaseDate: String!
   movieTitle: String!
@@ -71,7 +71,7 @@ type MyList {
 }
 
 input MyListInput {
-  movieId: String!
+  movieId: Float!
   moviePosterPath: String!
   movieReleaseDate: String!
   movieTitle: String!
@@ -101,14 +101,27 @@ input ProfileInput {
 
 type Query {
   checkSubscription(userId: String!): Boolean!
-  getLikedMovie(movieId: String!, profileId: String!): MyList
+  getCredits(id: Int!): String!
+  getDiscoverGenre(id: Int, keywords: String, page: Int! = 1): String!
+  getGenres: String!
+  getLikedMovie(movieId: Int!, profileId: String!): MyList
   getLikedMovies(profileId: String!): [MyList!]
+  getMovieCertification(id: Int!): String!
+  getMovieDetails(id: Int!): String!
+  getMovieVideos(id: Int!): String!
+  getNowPlayingMovies: String!
   getPaymentMethodDetails(customerId: String!): PaymentMethodDetails
+  getPopularMovies: String!
   getProfile(id: String!): Profile
   getProfiles(userId: String!): [Profile!]
+  getRecommendations(id: Int!): String!
+  getSimilarMovies(id: Int!): String!
+  getTopRatedMovies: String!
+  getUpcomingMovies: String!
   getUserByEmail(email: String!): User
   getUserById(id: String!): User
   getUserSubscription(userId: String!): UserSubscription!
+  searchMovies(query: String!): String!
 }
 
 type Session {

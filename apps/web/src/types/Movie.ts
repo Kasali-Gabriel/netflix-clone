@@ -1,55 +1,129 @@
-// Genre type
+// -----------------------------
+// CORE DOMAIN TYPES
+// -----------------------------
+
 export interface Genre {
   id: number;
   name: string;
 }
 
-// Type for multiple genres
-export interface Genres {
+export interface GenresResponse {
   genres: Genre[];
 }
 
-// Movie type definition
+// -----------------------------
+// MOVIE TYPES (TMDB-aligned)
+// -----------------------------
+
 export interface Movie {
+  id: number;
+  title: string;
   adult?: boolean;
-  backdrop_path?: string;
+  backdrop_path?: string | null;
   genre_ids?: number[];
-  id: string;
   original_language?: string;
   original_title?: string;
   overview?: string;
   popularity?: number;
-  poster_path?: string;
+  poster_path?: string | null;
   release_date?: string;
-  title: string;
   video?: boolean;
   vote_average?: number;
   vote_count?: number;
 }
 
-// Props for a movie carousel component
+// TMDB paginated response
+export interface MoviesResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+// -----------------------------
+// VIDEOS
+// -----------------------------
+
+export interface MovieVideo {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: 'Trailer' | 'Teaser' | 'Clip' | 'Featurette' | string;
+}
+
+export interface MovieVideosResponse {
+  id: number;
+  results: MovieVideo[];
+}
+
+// -----------------------------
+// CREDITS
+// -----------------------------
+
+export interface Cast {
+  id: number;
+  name: string;
+  character?: string;
+  profile_path?: string | null;
+}
+
+export interface Crew {
+  id: number;
+  name: string;
+  job: string;
+}
+
+export interface CreditsResponse {
+  id: number;
+  cast: Cast[];
+  crew: Crew[];
+}
+
+// Processed credits (what you actually return)
+export interface ProcessedCredits {
+  Director: string[];
+  Writer: string[];
+  castNames: string[];
+}
+
+// -----------------------------
+// MOVIE DETAILS
+// -----------------------------
+
+export interface MovieDetails extends Movie {
+  genres: Genre[];
+  runtime: number | null;
+  status?: string;
+  tagline?: string;
+  production_companies?: { name: string }[];
+  production_countries?: { name: string }[];
+}
+
+// -----------------------------
+// UI COMPONENT PROPS
+// -----------------------------
+
 export interface MovieCarouselProps {
   title?: string;
   movies: Movie[];
   isVertical?: boolean;
 }
 
-// Props for individual movie card component
 export interface MovieCardProps {
   movie: Movie;
   isVertical?: boolean;
 }
 
-// Props for the carousel banner
 export interface CarouselBannerProps {
-  id?: string;
+  id?: number;
   keywords?: string;
 }
 
 export interface MovieDetailsProps {
-  movie: any;
-  maturityRating: string;
-  credits: any;
+  movie: MovieDetails;
+  maturityRating: string | null;
+  credits: ProcessedCredits;
 }
 
 export interface SearchInputProps {
@@ -61,6 +135,15 @@ export interface SearchInputProps {
 export interface GenreDropdownProps {
   showBackground: boolean;
   isHome: boolean;
-  setIsSheetOpen: (arg0: boolean) => void;
   isSheetOpen?: boolean;
+  setIsSheetOpen: (open: boolean) => void;
+}
+
+// -----------------------------
+// PAGINATION
+// -----------------------------
+
+export interface PaginationProps {
+  currentPage: number;
+  onPageChange: (page: number) => void;
 }

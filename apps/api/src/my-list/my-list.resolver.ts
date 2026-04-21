@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MyList } from 'src/models/myList';
 import { MyListInput } from './Dto/create-myList.input';
 import { MyListService } from './my-list.service';
@@ -15,21 +15,17 @@ export class MyListResolver {
   @Mutation(() => MyList)
   async removeMovieFromList(
     @Args('profileId') profileId: string,
-    @Args('movieId') movieId: string,
+    @Args('movieId', { type: () => Int }) movieId: number,
   ) {
-    return await this.myListService.removeMovieFromList(profileId, movieId);
+    return this.myListService.removeMovieFromList(profileId, movieId);
   }
 
   @Query(() => MyList, { nullable: true })
   async getLikedMovie(
     @Args('profileId') profileId: string,
-    @Args('movieId') movieId: string,
+    @Args('movieId', { type: () => Int }) movieId: number,
   ) {
-    const likedMovie = await this.myListService.getLikedMovie(
-      profileId,
-      movieId,
-    );
-    return likedMovie;
+    return this.myListService.getLikedMovie(profileId, movieId);
   }
 
   @Query(() => [MyList], { nullable: true })

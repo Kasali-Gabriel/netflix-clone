@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import CarouselBannerWrapper from '@/components/Carousel/CarouselBannerWrapper';
 import LikedMovies from '@/components/Movies/LikedMovies';
 import MoviesCarousel from '@/components/Movies/MoviesCarousel';
@@ -30,7 +32,7 @@ export default async function HomeScreen() {
         <MoviesCarousel movies={topRatedMovies} title="Top Rated" />
         <MoviesCarousel movies={popularMovies} title="Popular" />
 
-        <LikedMovies profileId={profileId} />
+        <LikedMovies />
       </div>
     </div>
   );

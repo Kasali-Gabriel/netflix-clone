@@ -9,13 +9,14 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import SignOutBtn from '../Buttons/SignOutBtn';
 import SearchInput from '../Inputs/SearchInput';
 import ProfileManager from '../Profile/ProfileManager';
 import { Button } from '../ui/button';
+import { Dialog, DialogContent } from '../ui/dialog';
 import {
   Sheet,
   SheetClose,
@@ -30,11 +31,12 @@ const NavBar = ({
   isHome,
   profile,
   profiles,
-  setProfiles,
+  refreshProfiles,
   isLoading,
   userId,
 }: NavBarProps) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [switchingProfile, setSwitchingProfile] = useState<boolean>(false);
 
   const changePage = useChangePage();
 
@@ -79,6 +81,7 @@ const NavBar = ({
           height={100}
           className="h-7 w-7 rounded-sm object-cover md:h-10 md:w-10"
         />
+
         <ChevronDownIcon
           className={`m-0 flex h-5 w-5 font-bold lg:h-7 lg:w-7 ${
             isHome || showBackground
@@ -91,98 +94,111 @@ const NavBar = ({
   );
 
   return (
-    <nav className="my-auto flex flex-row">
-      {showSearch ? (
-        <div className="mx-3 mt-2 flex">
-          <Button
-            variant="outline"
-            onClick={() => {
-              setShowSearch(false);
-            }}
-            className="m-2 h-10 w-10 rounded-full border p-4 text-2xl"
-          >
-            <FontAwesomeIcon icon={faXmark} />
-          </Button>
-          <SearchInput
-            setIsSheetOpen={setIsSheetOpen}
-            showSearch={showSearch}
-            setShowSearch={setShowSearch}
-          />
-        </div>
-      ) : (
-        searchButton
+    <>
+      {switchingProfile && (
+        <Dialog open>
+          <DialogContent className="flex flex-col items-center justify-center gap-4 border-none bg-black/80 text-white">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <p className="text-sm">Switching profile...</p>
+          </DialogContent>
+        </Dialog>
       )}
 
-      <div className="flex xl:hidden">
-        <Sheet
-          open={isSheetOpen}
-          onOpenChange={(isOpen) => {
-            setIsSheetOpen(isOpen);
-            setShowSearch(isOpen);
-          }}
-        >
-          <SheetTrigger asChild>{mobileSearchButton}</SheetTrigger>
+      <nav className="my-auto flex flex-row">
+        {showSearch ? (
+          <div className="mx-3 mt-2 flex">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowSearch(false);
+              }}
+              className="m-2 h-10 w-10 rounded-full border p-4 text-2xl"
+            >
+              <FontAwesomeIcon icon={faXmark} />
+            </Button>
+            <SearchInput
+              setIsSheetOpen={setIsSheetOpen}
+              showSearch={showSearch}
+              setShowSearch={setShowSearch}
+            />
+          </div>
+        ) : (
+          searchButton
+        )}
 
-          <SheetContent
-            side="top"
-            className="flex flex-col p-2 sm:p-5 lg:p-7 xl:p-10"
+        <div className="flex xl:hidden">
+          <Sheet
+            open={isSheetOpen}
+            onOpenChange={(isOpen) => {
+              setIsSheetOpen(isOpen);
+              setShowSearch(isOpen);
+            }}
           >
-            <SheetHeader>
-              <SheetClose asChild>
-                <div className="flex items-start justify-start">
-                  <button
-                    type="submit"
-                    className="mb-2 p-2 text-2xl sm:text-4xl"
-                  >
-                    <FontAwesomeIcon icon={faArrowLeftLong} />
-                  </button>
-                </div>
-              </SheetClose>
+            <SheetTrigger asChild>{mobileSearchButton}</SheetTrigger>
 
-              <SearchInput
-                showSearch={showSearch}
-                setShowSearch={setShowSearch}
-                setIsSheetOpen={setIsSheetOpen}
+            <SheetContent
+              side="top"
+              className="flex flex-col bg-white p-2 sm:p-5 lg:p-7 
+              xl:p-10 dark:bg-stone-500"
+            >
+              <SheetHeader>
+                <SheetClose asChild>
+                  <div className="flex items-start justify-start">
+                    <button
+                      type="submit"
+                      className="mb-2 p-2 text-2xl sm:text-4xl"
+                    >
+                      <FontAwesomeIcon icon={faArrowLeftLong} />
+                    </button>
+                  </div>
+                </SheetClose>
+
+                <SearchInput
+                  showSearch={showSearch}
+                  setShowSearch={setShowSearch}
+                  setIsSheetOpen={setIsSheetOpen}
+                />
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+        </div>
+
+        <Sheet open={isProfileOpen} onOpenChange={setIsProfileOpen}>
+          <SheetTrigger asChild>{profileButton}</SheetTrigger>
+          <SheetContent className="bg-white dark:bg-stone-500">
+            <SheetHeader className="mb-5">
+              <ProfileManager
+                profile={profile}
+                profiles={profiles}
+                refreshProfiles={refreshProfiles}
+                isLoading={isLoading}
+                userId={userId}
+                setIsProfileOpen={setIsProfileOpen}
+                setSwitchingProfile={setSwitchingProfile}
               />
             </SheetHeader>
+
+            <SheetClose asChild>
+              <button
+                className="m-0 flex items-center justify-start text-xl font-semibold sm:text-2xl"
+                onClick={() => {
+                  changePage('/MyAccount');
+                }}
+              >
+                <FontAwesomeIcon icon={faUser} className="mr-5" />
+                My Account
+              </button>
+            </SheetClose>
+
+            <SheetFooter>
+              <div className="absolute bottom-10 right-4">
+                <SignOutBtn />
+              </div>
+            </SheetFooter>
           </SheetContent>
         </Sheet>
-      </div>
-
-      <Sheet open={isProfileOpen} onOpenChange={setIsProfileOpen}>
-        <SheetTrigger asChild>{profileButton}</SheetTrigger>
-        <SheetContent className="dark:bg-stone-500">
-          <SheetHeader className="mb-5">
-            <ProfileManager
-              profile={profile}
-              profiles={profiles}
-              setProfiles={setProfiles}
-              isLoading={isLoading}
-              userId={userId}
-              setIsProfileOpen={setIsProfileOpen}
-            />
-          </SheetHeader>
-
-          <SheetClose asChild>
-            <button
-              className="m-0 flex items-center justify-start text-xl font-semibold sm:text-2xl"
-              onClick={() => {
-                changePage('/MyAccount');
-              }}
-            >
-              <FontAwesomeIcon icon={faUser} className="mr-5" />
-              My Account
-            </button>
-          </SheetClose>
-
-          <SheetFooter>
-            <div className="absolute bottom-10 right-4">
-              <SignOutBtn />
-            </div>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-    </nav>
+      </nav>
+    </>
   );
 };
 

@@ -9,7 +9,7 @@ export class MyList {
   profileId: string;
 
   @Field()
-  movieId: string;
+  movieId: number;
 
   @Field()
   movieTitle: string;

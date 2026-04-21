@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
+import { useProfiles } from '@/hooks/useProfiles';
 import { faBars, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
@@ -17,16 +17,11 @@ import {
   SheetTrigger,
 } from '../ui/sheet';
 import NavBar from './NavBar';
-import useChangePage from '@/hooks/useChangePage';
-import { Profile } from '@/types/Profile';
-import { GET_PROFILE, GET_PROFILES } from '@/graphql/queries';
 
 interface HeaderProps {
   profileId: string;
   userId: string;
 }
-
-let refetchProfiles: () => void;
 
 const Header = ({ profileId, userId }: HeaderProps) => {
   const [showBackground, setShowBackground] = useState<boolean>(false);
@@ -34,34 +29,16 @@ const Header = ({ profileId, userId }: HeaderProps) => {
   const [lastScrollY, setLastScrollY] = useState<number>(0);
   const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
 
-  const changePage = useChangePage();
   const pathname = usePathname();
   const isHome = pathname === '/Home';
   const bgColor = pathname === '/Home' ? 'bg-transparent ' : '';
 
-  const [profile, setProfile] = useState<Profile>();
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-
   useState<string | null>(null);
 
-  useQuery(GET_PROFILE, {
-    variables: { id: profileId },
-    onCompleted: (data) => {
-      setProfile(data.getProfile);
-    },
-  });
-
-  const { loading, refetch } = useQuery(GET_PROFILES, {
-    variables: { userId: userId },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
-      setProfiles(data.getProfiles);
-    },
-  });
-
-  refetchProfiles = () => {
-    refetch();
-  };
+  const { profile, profiles, refreshProfiles, loading } = useProfiles(
+    userId,
+    profileId,
+  );
 
   const filteredProfiles = profile
     ? profiles.filter((p) => p?.name !== profile.name)
@@ -116,7 +93,10 @@ const Header = ({ profileId, userId }: HeaderProps) => {
                 <FontAwesomeIcon icon={faBars} className="text-2xl" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="pl-5">
+            <SheetContent
+              side="left"
+              className="bg-white pl-5 dark:bg-stone-500"
+            >
               <SheetHeader className="mb-5 ">
                 <h1 className="text-left text-2xl ">Browse</h1>
               </SheetHeader>
@@ -129,23 +109,22 @@ const Header = ({ profileId, userId }: HeaderProps) => {
               />
 
               <SheetClose asChild>
-                <Button
-                  variant="ghost"
-                  type="submit"
-                  className={`my-3 p-0 text-2xl font-semibold hover:bg-transparent ${
-                    isSheetOpen
-                      ? 'text-black dark:text-white'
-                      : isHome || showBackground
-                        ? 'text-white hover:text-white'
-                        : 'hover:text-black dark:hover:text-white'
-                  }`}
-                  onClick={() => {
-                    changePage('/MyList');
-                  }}
-                >
-                  <FontAwesomeIcon icon={faClipboardList} className="mr-5" />
-                  My List
-                </Button>
+                <Link href="/MyList">
+                  <Button
+                    variant="ghost"
+                    type="submit"
+                    className={`my-3 p-0 text-2xl font-semibold hover:bg-transparent ${
+                      isSheetOpen
+                        ? 'text-black dark:text-white'
+                        : isHome || showBackground
+                          ? 'text-white hover:text-white'
+                          : 'hover:text-black dark:hover:text-white'
+                    }`}
+                  >
+                    <FontAwesomeIcon icon={faClipboardList} className="mr-5" />
+                    My List
+                  </Button>
+                </Link>
               </SheetClose>
             </SheetContent>
           </Sheet>
@@ -170,19 +149,19 @@ const Header = ({ profileId, userId }: HeaderProps) => {
             isHome={isHome}
             setIsSheetOpen={setIsSheetOpen}
           />
-          <Button
-            variant="ghost"
-            className={`my-3 text-xl font-semibold ${
-              isHome || showBackground
-                ? 'text-white hover:text-white'
-                : 'hover:text-black dark:hover:text-white'
-            } bg-transparent hover:scale-110 hover:bg-transparent lg:text-2xl`}
-            onClick={() => {
-              changePage('/MyList');
-            }}
-          >
-            My List
-          </Button>
+
+          <Link href="/MyList">
+            <Button
+              variant="ghost"
+              className={`my-3 text-xl font-semibold ${
+                isHome || showBackground
+                  ? 'text-white hover:text-white'
+                  : 'hover:text-black dark:hover:text-white'
+              } bg-transparent hover:scale-110 hover:bg-transparent lg:text-2xl`}
+            >
+              My List
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -193,7 +172,7 @@ const Header = ({ profileId, userId }: HeaderProps) => {
           showBackground={showBackground}
           isHome={isHome}
           profiles={filteredProfiles}
-          setProfiles={setProfiles}
+          refreshProfiles={refreshProfiles}
           isLoading={loading}
         />
       )}
@@ -202,5 +181,3 @@ const Header = ({ profileId, userId }: HeaderProps) => {
 };
 
 export default Header;
-
-export { refetchProfiles };

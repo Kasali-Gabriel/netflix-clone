@@ -1,5 +1,5 @@
 {
-  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["NEXT_PUBLIC_BASE_URL", "NEXT_PUBLIC_API_URL", "SECRET_KEY"],
   "tasks": {
     "build": {
       "inputs": ["$TURBO_DEFAULT$", ".env*"],

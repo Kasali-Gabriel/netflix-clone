@@ -1,7 +1,12 @@
-import { useMutation } from '@apollo/client';
 import Image from 'next/image';
 import { useState } from 'react';
 
+import { useProfiles } from '@/hooks/useProfiles';
+import {
+  ChangeProfileNameDialogProps,
+  DeleteProfileDialogProps,
+  ProfileDialogProps,
+} from '@/types/Profile';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -13,8 +18,6 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { ChangeProfileNameDialogProps, DeleteProfileDialogProps, ProfileDialogProps } from '@/types/Profile';
-import { DELETE_PROFILE, RENAME_PROFILE } from '@/graphql/mutations';
 
 export const ProfileDialog = ({
   profileName,
@@ -114,24 +117,15 @@ export const ChangeProfileNameDialog = ({
   profileId,
   oldName,
   onClose,
-  onChangeSuccess,
+  userId
 }: ChangeProfileNameDialogProps) => {
   const [newName, setNewName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const [renameProfile] = useMutation(RENAME_PROFILE, {
-    onCompleted: async (data) => {
-      if (data?.renameProfile) {
-        onChangeSuccess();
-        onClose();
-        setIsLoading(false);
-      }
-    },
-  });
-
+  const { renameProfile } = useProfiles(userId, profileId);
   const handleChangeName = async () => {
     setIsLoading(true);
-    await renameProfile({ variables: { id: profileId, name: newName } });
+    await renameProfile(profileId, newName, onClose);
   };
 
   return (
@@ -181,23 +175,16 @@ export const ChangeProfileNameDialog = ({
 export const DeleteProfileDialog = ({
   profileId,
   onClose,
-  onDeleteSuccess,
+  userId
 }: DeleteProfileDialogProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const [deleteProfile] = useMutation(DELETE_PROFILE, {
-    onCompleted: async (data) => {
-      if (data?.deleteProfile) {
-        onDeleteSuccess();
-        onClose();
-        setIsLoading(false);
-      }
-    },
-  });
+  const { deleteProfile} = useProfiles(userId, profileId);
 
   const handleDelete = async () => {
     setIsLoading(true);
-    await deleteProfile({ variables: { id: profileId } });
+
+    await deleteProfile(profileId, onClose);
   };
 
   return (

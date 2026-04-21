@@ -12,16 +12,24 @@ export const useProfileClick = () => {
   const [isPending, startTransition] = useTransition();
 
   const handleProfileClick = useCallback(
-    (profile: Profile) => {
-      Cookies.set('profileId', profile.id, {
-        expires: 7,
-      });
+    (
+      profile: Profile,
+      setSwitchingProfile?: (v: boolean) => void,
+      setIsProfileOpen?: (v: boolean) => void,
+    ) => {
+      Cookies.set('profileId', profile.id, { expires: 7 });
+
+      setSwitchingProfile?.(true);
+
       startTransition(() => {
         if (pathname === '/profiles') {
           changePage('/Home');
         } else {
           router.refresh();
         }
+
+        setIsProfileOpen?.(false);
+        setSwitchingProfile?.(false);
       });
     },
     [pathname, changePage],

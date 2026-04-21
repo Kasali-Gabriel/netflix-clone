@@ -1,51 +1,51 @@
+import { CREATE_PROFILE } from '@/graphql/mutations';
 import { useMutation } from '@apollo/client';
-import { useState, useTransition } from 'react';
-import { CREATE_PROFILE } from '../graphql/mutations';
+import { useState } from 'react';
 import { useProfileClick } from './useProfileClick';
 
 export const useAddProfile = (
   profileName: string,
   selectedImage: string,
-  setProfiles: Function,
+  refreshProfiles: () => Promise<void>,
   userId: string,
+  setSwitchingProfile?: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
-  const [isPending, startTransition] = useTransition();
+  const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const { handleProfileClick } = useProfileClick();
 
-  const [createProfile] = useMutation(CREATE_PROFILE, {
-    onCompleted: async (data) => {
-      if (data?.createProfile) {
-        const profile = data.createProfile;
-        setProfiles((prev: any) => [...prev, profile]);
-        handleProfileClick(profile);
-      }
-    },
-    onError: (error) => {
-      setError(error.message);
-    },
-  });
+  const [createProfile] = useMutation(CREATE_PROFILE);
 
   const handleAddProfile = async () => {
-    if (!profileName || !selectedImage || !userId) return;
+    if (!profileName || !selectedImage || !userId || isAdding) return;
 
-    startTransition(async () => {
-      try {
-        await createProfile({
-          variables: {
-            profileInput: {
-              name: profileName,
-              imageSrc: selectedImage,
-              userId: userId,
-            },
+    setIsAdding(true);
+    setSwitchingProfile?.(true);
+
+    try {
+      const { data } = await createProfile({
+        variables: {
+          profileInput: {
+            name: profileName,
+            imageSrc: selectedImage,
+            userId,
           },
-        });
-      } catch (err) {
-        console.error('Error:', error);
-      }
-    });
+        },
+      });
+
+      const profile = data?.createProfile;
+      if (!profile) return;
+
+      await refreshProfiles();
+      handleProfileClick(profile);
+    } catch (err: any) {
+      setError(err.message || 'Error');
+    } finally {
+      setIsAdding(false);
+      setSwitchingProfile?.(false);
+    }
   };
 
-  return { handleAddProfile, isPending, error };
+  return { handleAddProfile, isAdding, error };
 };

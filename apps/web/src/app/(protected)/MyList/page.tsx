@@ -16,7 +16,7 @@ export default async function MyListPage() {
   return (
     <div className="pt-20 sm:pt-24 md:pt-32 lg:pt-28">
       <div className="flex flex-col items-center justify-center">
-        <LikedMovies profileId={profileId} popularMovies={popularMovies} />
+        <LikedMovies popularMovies={popularMovies} />
       </div>
     </div>
   );

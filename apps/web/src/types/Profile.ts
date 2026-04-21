@@ -20,29 +20,35 @@ export interface ProfileDialogProps {
 export interface DeleteProfileDialogProps {
   profileId: string;
   onClose: () => void;
-  onDeleteSuccess: () => void;
+  userId: string;
 }
 
 export interface ChangeProfileNameDialogProps {
   profileId: string;
   oldName: string;
   onClose: () => void;
-  onChangeSuccess: () => void;
+  userId: string;
 }
 
 export interface ProfileManagerProps {
   profile: Profile;
   profiles: Profile[];
-  setProfiles: React.Dispatch<React.SetStateAction<Profile[]>>;
+  refreshProfiles: () => Promise<void>;
   isLoading: boolean;
   userId: string;
   setIsProfileOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSwitchingProfile: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ProfileListProps {
   profiles: Profile[];
-  handleProfileClick: (profile: Profile) => void;
+  handleProfileClick: (
+    profile: Profile,
+    setSwitchingProfile?: (v: boolean) => void,
+    setIsProfileOpen?: (v: boolean) => void,
+  ) => void;
   setIsProfileOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSwitchingProfile: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Interface for user profile information

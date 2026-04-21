@@ -1,47 +1,63 @@
 'use client';
 
+import { useParams, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import PaginationSection from '@/components/Filters/Pagination';
 import MoviesCarousel from '@/components/Movies/MoviesCarousel';
 import { getDiscoverGenre } from '@/lib/movieFetcher';
-import { GenrePageProps } from '@/types/index';
 import { Movie } from '@/types/Movie';
-import { use, useEffect, useState } from 'react';
 import { FadeLoader } from 'react-spinners';
 
-const GenrePage = ({ params, searchParams }: GenrePageProps) => {
-  const { id } = use(params) as { id: string };
-  const { genre } = use(searchParams) as { genre: string };
+const GenrePage = () => {
+  const params = useParams();
+  const searchParams = useSearchParams();
+
+  const rawId = params.id;
+  const id = Number(rawId);
+
+  const genre = searchParams.get('genre') ?? '';
+
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
+  // restore page
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      const savedPage = sessionStorage.getItem(`currentPage-${id}`);
-      if (savedPage) {
-        setCurrentPage(parseInt(savedPage, 10));
-      }
-    }
+    const saved = sessionStorage.getItem(`currentPage-${id}`);
+    if (saved) setCurrentPage(Number(saved));
   }, [id]);
 
+  // persist page
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      sessionStorage.setItem(`currentPage-${id}`, currentPage.toString());
-    }
+    sessionStorage.setItem(`currentPage-${id}`, String(currentPage));
   }, [currentPage, id]);
 
-  const fetchMovies = async () => {
-    setLoading(true);
-    const fetchedMovies = await getDiscoverGenre(id, '', currentPage);
-
-    setMovies(fetchedMovies);
-
-    setLoading(false);
-  };
-
   useEffect(() => {
-    fetchMovies();
+    const fetchData = async () => {
+      if (!Number.isFinite(id)) return;
+
+      setLoading(true);
+
+      try {
+        // IMPORTANT: send NUMBER if backend expects Float/Int
+        const data = await getDiscoverGenre(id, '', currentPage);
+
+        // guard against bad shapes
+        if (Array.isArray(data)) {
+          setMovies(data);
+        } else {
+          setMovies([]);
+        }
+      } catch (err) {
+        console.error('Genre fetch failed:', err);
+        setMovies([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [id, currentPage]);
 
   const handlePageChange = (page: number) => {
@@ -59,18 +75,16 @@ const GenrePage = ({ params, searchParams }: GenrePageProps) => {
 
   return (
     <div className="pt-20 sm:pt-24 md:pt-32 lg:pt-28">
-      <div className="flex flex-col">
-        <h1 className="w-full px-4 text-left font-mono text-2xl font-semibold sm:text-3xl md:text-5xl">
-          {genre}
-        </h1>
+      <h1 className="px-4 text-2xl font-semibold sm:text-3xl md:text-5xl">
+        {decodeURIComponent(genre)}
+      </h1>
 
-        <MoviesCarousel movies={movies} isVertical />
+      <MoviesCarousel movies={movies} isVertical />
 
-        <PaginationSection
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
-      </div>
+      <PaginationSection
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

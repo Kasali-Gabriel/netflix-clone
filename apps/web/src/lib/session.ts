@@ -9,7 +9,7 @@ export type Session = {
   refreshToken: string;
 };
 
-const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY!;
+const secretKey = process.env.SECRET_KEY!;
 const encodedKey = new TextEncoder().encode(secretKey);
 
 export async function createSession(payload: Session) {

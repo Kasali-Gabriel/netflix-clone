@@ -4,7 +4,7 @@ import { checkSubscription } from './lib/checkSubscription';
 import type { Session } from './lib/session';
 import { authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoute } from './routes';
 
-const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY!;
+const secretKey = process.env.SECRET_KEY!;
 const encodedKey = new TextEncoder().encode(secretKey);
 
 async function getSessionFromRequest(
@@ -24,7 +24,6 @@ async function getSessionFromRequest(
 }
 
 export default async function middleware(req: NextRequest) {
-  console.log('Middleware invoked');
 
   const session = await getSessionFromRequest(req);
   const user = session?.user;

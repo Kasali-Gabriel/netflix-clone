@@ -2,7 +2,7 @@
 
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, CheckCircle2Icon } from 'lucide-react';
+import { Check, CheckCircle2Icon, Eye, EyeOff } from 'lucide-react';
 import { useContext, useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -35,6 +35,7 @@ const Page = () => {
   );
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -152,13 +153,27 @@ const Page = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <Input
-                              {...field}
-                              disabled={isPending}
-                              className="f my-4 h-16 rounded border-white bg-gray-200/10 text-lg text-black"
-                              placeholder="Enter your password"
-                              type="password"
-                            />
+                            <div className="relative">
+                              <Input
+                                {...field}
+                                disabled={isPending}
+                                className="my-4 h-16 rounded  bg-gray-200/10 pr-12 text-lg "
+                                placeholder="Enter your password"
+                                type={showPassword ? 'text' : 'password'}
+                              />
+
+                              <button
+                                type="button"
+                                onClick={() => setShowPassword((v) => !v)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 "
+                              >
+                                {showPassword ? (
+                                  <EyeOff color="#9CA3AF" size={20} />
+                                ) : (
+                                  <Eye color="#9CA3AF" size={20} />
+                                )}
+                              </button>
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>

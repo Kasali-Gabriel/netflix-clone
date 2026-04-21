@@ -6,7 +6,7 @@ import {
 } from '@apollo/client';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:3001/graphql',
+  uri: process.env.NEXT_PUBLIC_API_URL 
 });
 
 const noCacheLink = new ApolloLink((operation, forward) => {
