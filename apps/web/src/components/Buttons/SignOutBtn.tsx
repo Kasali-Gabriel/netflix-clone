@@ -37,7 +37,7 @@ const SignOutBtn = () => {
         type="button"
         disabled={isPending}
         onClick={handleClick}
-        className="flex flex-row items-center p-5 text-lg md:p-8 md:text-2xl xl:p-5"
+        className="flex flex-row  text-black items-center p-5 text-lg md:p-8 md:text-2xl xl:p-5"
       >
         {notAuth && (
           <SquareArrowOutUpRight

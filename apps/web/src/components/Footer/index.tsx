@@ -25,7 +25,7 @@ const Footer = () => {
 
   return (
     <div
-      className={`xl:py-24 xl:px-44 p-7 ${bgColor} underline flex text-sm sm:text-base flex-col`}
+      className={`xl:py-24 xl:px-44 p-7 ${bgColor} underline text-black flex text-sm sm:text-base flex-col`}
     >
       <div className="mb-2 xl:max-w-[60vw] xl:ml-20">
         <Link href="/">{firstItem}</Link>

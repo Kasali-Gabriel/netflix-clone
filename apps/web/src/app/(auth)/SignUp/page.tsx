@@ -112,7 +112,7 @@ const Page = () => {
   }
 
   return (
-    <div className="h-screen bg-white">
+    <div className="h-screen bg-white text-red-500">
       <div className="mx-auto h-full w-full sm:mt-5 sm:w-[470px]">
         <Card className="flex flex-col justify-center border-none bg-transparent px-4 sm:p-7">
           <CardHeader>
@@ -157,7 +157,7 @@ const Page = () => {
                               <Input
                                 {...field}
                                 disabled={isPending}
-                                className="my-4 h-16 rounded  bg-gray-200/10 pr-12 text-lg "
+                                className="my-4 h-16 rounded bg-gray-200/10 pr-12 text-lg text-black "
                                 placeholder="Enter your password"
                                 type={showPassword ? 'text' : 'password'}
                               />
@@ -194,7 +194,7 @@ const Page = () => {
                 </Form>
               </div>
             ) : (
-              <div className="max-w-80 space-y-3 text-xl">
+              <div className="max-w-80 space-y-3 text-xl text-black">
                 <p className="flex">
                   <Check className="mr-2 mt-1 h-10 w-8 text-[#CC0000]" /> No
                   commitments, cancel at any time.
